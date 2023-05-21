@@ -12,8 +12,8 @@ public class Token {
     private String deviceId;
 
     //Partner
-    private String uniqueCustomerIdentifier = null;
-    private String email = null;
+    private String uniqueCustomerIdentifier = "";
+    private String email = "";
 
     //CashPoint
     private String externalDeviceId = null;

@@ -8,6 +8,6 @@ import javax.ws.rs.core.Application;
  * @author IGNACIO
  */
 @ApplicationPath("")
-public class Aplicacion extends Application{ 
-    
+public class Aplicacion extends Application {
+
 }
