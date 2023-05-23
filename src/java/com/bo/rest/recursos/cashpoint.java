@@ -3,7 +3,6 @@ package com.bo.rest.recursos;
 import com.bo.rest.controlador.Login;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -23,8 +22,13 @@ public class cashpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getToken(@PathParam("source") String source, String body) {
-        Login login = new Login();
-        return Response.ok().entity(login.singIn(source, body)).build();
+        if (source.equals("partner") || source.equals("cashpoint")) {
+            Login login = new Login();
+            return Response.ok().entity(login.singIn(source, body)).build();
+        } else {
+            return Response.serverError().build();
+        }
+
     }
 
 }
