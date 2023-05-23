@@ -20,7 +20,7 @@ import com.bo.rest.modelos.Token;
  */
 public class Login {
 
-    public Gson gson = new Gson();
+    private Gson gson = new Gson();
     Connection connection = DBConnection.getConnection();
 
     public String singIn(String source, String body) {
@@ -29,7 +29,7 @@ public class Login {
         String message = "Success";
 
         try {
-            Token tokenBody = gson.fromJson(body, Token.class);
+            Token tokenBody = this.gson.fromJson(body, Token.class);
 
             if (!verifyCredentials(tokenBody)) {
                 throw new Exception();
