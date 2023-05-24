@@ -4,6 +4,7 @@
  */
 package com.bo.rest.controlador;
 
+import com.bo.rest.modelos.Credentials;
 import com.bo.rest.utils.DBConnection;
 import com.bo.rest.utils.TokenUtils;
 import com.google.gson.Gson;
@@ -30,12 +31,12 @@ public class Login {
 
         try {
             Token tokenBody = this.gson.fromJson(body, Token.class);
-
-            if (!verifyCredentials(tokenBody)) {
+            Credentials credentials = this.getCredentialas(tokenBody);
+            if (credentials.getApiKey() == null) {
                 throw new Exception();
             }
 
-            String token = TokenUtils.generateJwt(body);
+            String token = TokenUtils.generateJwt(this.gson.toJson(credentials));
 
             if (token != null) {
                 JsonObject data = new JsonObject();
@@ -62,20 +63,26 @@ public class Login {
         return result.toString();
     }
 
-    private boolean verifyCredentials(Token token) {
+    private Credentials getCredentialas(Token token) {
         try {
+            
             Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery("select date(now())");
+            String query = String.format("select * from credenciales where apikey='%s' and password='%s'", token.getApiKey(), token.getPassword());
+            ResultSet result = statement.executeQuery(query);
 
-            // Execute SQL statements using the statement object
-            // ...
-            // Close the statement and connection when done
+            Credentials credentials = new Credentials();
+            while (result.next()) {
+                credentials.setApiKey(result.getString("apikey"));
+                credentials.setPassword(result.getString("password"));
+            }
+
             statement.close();
-            connection.close();
-            return true;
+            return credentials;
         } catch (Exception e) {
-            return false;
+            System.out.println(e);
+            return null;
         }
+
     }
 
 }
