@@ -2,6 +2,7 @@ package com.bo.rest.recursos;
 
 import com.bo.rest.controlador.Login;
 import com.bo.rest.controlador.Transactions;
+import com.bo.rest.utils.TypeUtils;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -26,7 +27,7 @@ public class cashpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getToken(String body) {
         Login login = new Login();
-        return Response.ok().entity(login.singIn("cashpoint", body)).build();
+        return Response.ok().entity(login.singIn(TypeUtils.CASHPOINT, body)).build();
 
     }
 

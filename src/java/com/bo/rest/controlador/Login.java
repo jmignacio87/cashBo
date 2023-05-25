@@ -4,7 +4,7 @@
  */
 package com.bo.rest.controlador;
 
-import com.bo.rest.modelos.Credentials;
+import com.bo.rest.data.TokenQuery;
 import com.bo.rest.utils.DBConnection;
 import com.bo.rest.utils.TokenUtils;
 import com.google.gson.Gson;
@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import com.bo.rest.modelos.Token;
+import com.bo.rest.utils.TypeUtils;
 
 /**
  *
@@ -31,12 +32,13 @@ public class Login {
 
         try {
             Token tokenBody = this.gson.fromJson(body, Token.class);
-            Credentials credentials = this.getCredentialas(tokenBody);
-            if (credentials.getApiKey() == null) {
+            String credentials = this.getCredentials(source, tokenBody);
+
+            if (credentials == null) {
                 throw new Exception();
             }
 
-            String token = TokenUtils.generateJwt(this.gson.toJson(credentials));
+            String token = TokenUtils.generateJwt(credentials);
 
             if (token != null) {
                 JsonObject data = new JsonObject();
@@ -63,21 +65,26 @@ public class Login {
         return result.toString();
     }
 
-    private Credentials getCredentialas(Token token) {
+    private String getCredentials(String source, Token token) {
         try {
-            
+
             Statement statement = connection.createStatement();
-            String query = String.format("select * from credenciales where apikey='%s' and password='%s'", token.getApiKey(), token.getPassword());
+            String query = TokenQuery.getQueryToken(source, token);
+
             ResultSet result = statement.executeQuery(query);
 
-            Credentials credentials = new Credentials();
+            JsonObject credentials = new JsonObject();
             while (result.next()) {
-                credentials.setApiKey(result.getString("apikey"));
-                credentials.setPassword(result.getString("password"));
+                if (source.equals(TypeUtils.CASHPOINT)) {
+                    credentials.addProperty("value_1", "value_1");
+                } else if (source.equals(TypeUtils.PARTNER)) {
+                    credentials.addProperty("value_1", "value_1");
+                }
             }
 
             statement.close();
-            return credentials;
+
+            return credentials.toString();
         } catch (Exception e) {
             System.out.println(e);
             return null;
