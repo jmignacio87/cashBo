@@ -1,13 +1,16 @@
-
 package com.bo.rest.recursos;
 
-import com.bo.rest.modelos.Token;
+import com.bo.rest.controlador.Login;
+import com.bo.rest.controlador.Transactions;
+import com.bo.rest.utils.TypeUtils;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -15,39 +18,56 @@ import javax.ws.rs.core.Response;
  *
  * @author IGNACIO
  */
-@Path("/{source}")
+@Path("/cashpoint")
 public class cashpoint {
-    @GET
-    @Path("/saludo")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String saludo(){
-        return "hola, metodo get inicial";
-    }
-     @GET
-    @Path("/saludo2")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String saludo2(){
-        return "hola, metodo 2 de get";
-    }
-    
+
     @POST
     @Path("/token")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getToken(@PathParam("source") String source, Object body) {
+    public Response getToken(String body) {
+        Login login = new Login();
+        return Response.ok().entity(login.singIn(TypeUtils.CASHPOINT, body)).build();
 
-        Token token = new Token("", "", "");
+    }
 
-        if (source == "partner") {
-            token.setUniqueCustomerIdentifier("");
-            token.setEmail("");
-            return Response.ok().entity("partner").build();
-        } else if (source == "cashpoint") {
-            token.setExternalDeviceId("");
-            return Response.ok().entity("cashpoint").build();
+    @GET
+    @Path("/transactions/pending")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPendingTransactions(@Context HttpHeaders headers) {
+        String authorization = headers.getRequestHeader("Authorization").get(0);
+
+        if (authorization.startsWith("Bearer")) {
+            Transactions transactions = new Transactions();
+
+            return Response.ok().entity(transactions.getPendingTransactions(authorization)).build();
         }
 
+        return Response.serverError().build();
+    }
+
+    @POST
+    @Path("/transactiondetails")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getDetailTransactions() {
         return Response.ok().entity("").build();
     }
-    
+
+    @POST
+    @Path("/request/validate-transaction")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response validateTransaction() {
+        return Response.ok().entity("").build();
+    }
+
+    @POST
+    @Path("/gave")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response gave() {
+        return Response.ok().entity("").build();
+    }
+
 }
