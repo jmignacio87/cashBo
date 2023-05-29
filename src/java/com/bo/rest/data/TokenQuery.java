@@ -29,7 +29,7 @@ public class TokenQuery {
                         + " cp.cashpoint_id = '%s' and"
                         + " cp.id_partner = '%s' and"
                         + " cr.apiKey = '%s' and"
-                        + " cr.password = '%s'", token.getExternalDeviceId(), token.getDeviceId(), token.getApiKey(), token.getPassword());
+                        + " cr.password = '%s'", token.getDeviceId(), token.getExternalDeviceId(), token.getApiKey(), token.getPassword());
             } else if (source.equals(TypeUtils.PARTNER)) {
                 query = String.format("select"
                         + " cr.apikey"
