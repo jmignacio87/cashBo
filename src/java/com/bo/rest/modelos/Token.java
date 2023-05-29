@@ -1,5 +1,6 @@
-
 package com.bo.rest.modelos;
+
+import com.bo.rest.utils.TypeUtils;
 
 /**
  *
@@ -17,6 +18,8 @@ public class Token {
 
     //CashPoint
     private String externalDeviceId = null;
+
+    private Integer type = 0;
 
     public Token(String apiKey, String password, String deviceId) {
         this.apiKey = apiKey;
@@ -70,6 +73,18 @@ public class Token {
 
     public void setExternalDeviceId(String externalDeviceId) {
         this.externalDeviceId = externalDeviceId;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(String source) {
+        if (source.equals(TypeUtils.CASHPOINT)) {
+            this.type = 2;
+        } else if (source.equals(TypeUtils.PARTNER)) {
+            this.type = 1;
+        }
     }
 
 }

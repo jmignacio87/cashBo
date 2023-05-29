@@ -14,7 +14,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import com.bo.rest.modelos.Token;
-import com.bo.rest.utils.TypeUtils;
 
 /**
  *
@@ -73,18 +72,13 @@ public class Login {
 
             ResultSet result = statement.executeQuery(query);
 
-            JsonObject credentials = new JsonObject();
-            while (result.next()) {
-                if (source.equals(TypeUtils.CASHPOINT)) {
-                    credentials.addProperty("value_1", "value_1");
-                } else if (source.equals(TypeUtils.PARTNER)) {
-                    credentials.addProperty("value_1", "value_1");
-                }
+            if (result.next()) {
+                token.setType(source);
+                return this.gson.toJson(token);
             }
 
-            statement.close();
+            return null;
 
-            return credentials.toString();
         } catch (Exception e) {
             System.out.println(e);
             return null;
