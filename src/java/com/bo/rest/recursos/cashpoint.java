@@ -1,6 +1,7 @@
 package com.bo.rest.recursos;
 
 import com.bo.rest.controlador.Login;
+import com.bo.rest.controlador.TransactionDetails;
 import com.bo.rest.controlador.Transactions;
 import com.bo.rest.utils.TypeUtils;
 
@@ -54,9 +55,9 @@ public class cashpoint {
         String authorization = headers.getRequestHeader("Authorization").get(0);
 
         if (authorization.startsWith("Bearer")) {
-            Transactions transactions = new Transactions();
+            TransactionDetails transactionDetails = new TransactionDetails();
 
-            return Response.ok().entity(transactions.getPendingTransactions(authorization)).build();
+            return Response.ok().entity(transactionDetails.getTransactionDetail(authorization, body)).build();
         }
 
         return Response.serverError().build();

@@ -11,6 +11,7 @@ package com.bo.rest.modelos;
 public class Transaction {
 
     private String socash_txn_id;
+    private Integer queue_number;
 
     public Transaction() {
     }
@@ -21,6 +22,14 @@ public class Transaction {
 
     public void setSocash_txn_id(String socash_txn_id) {
         this.socash_txn_id = socash_txn_id;
+    }
+
+    public Integer getQueue_number() {
+        return queue_number;
+    }
+
+    public void setQueue_number(Integer queue_number) {
+        this.queue_number = queue_number;
     }
 
 }
