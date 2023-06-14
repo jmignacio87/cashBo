@@ -12,4 +12,7 @@ public class TypeUtils {
 
     public static String CASHPOINT = "cashpoint";
     public static String PARTNER = "partner";
+
+    public static Integer CASHPOINT_VALUE = 2;
+    public static Integer PARTNER_VALUE = 1;
 }

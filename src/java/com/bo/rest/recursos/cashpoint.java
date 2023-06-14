@@ -50,8 +50,16 @@ public class cashpoint {
     @Path("/transactiondetails")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDetailTransactions() {
-        return Response.ok().entity("").build();
+    public Response getDetailTransactions(@Context HttpHeaders headers, String body) {
+        String authorization = headers.getRequestHeader("Authorization").get(0);
+
+        if (authorization.startsWith("Bearer")) {
+            Transactions transactions = new Transactions();
+
+            return Response.ok().entity(transactions.getPendingTransactions(authorization)).build();
+        }
+
+        return Response.serverError().build();
     }
 
     @POST
