@@ -13,7 +13,7 @@ public class CashpointQuery {
     public static String getQueryTransactionsPending(String deviceId) {
         String query = null;
 
-        query = String.format("select socash_txn_id as socash_txn_id"
+        query = String.format("select socash_txn_id as socash_txn_id, 1 as queue_number"
                 + " from trx_codigopin"
                 + " where id_estado_trx = 1 and cashpoint_id = '%s'", deviceId);
 
