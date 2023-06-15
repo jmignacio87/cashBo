@@ -20,7 +20,7 @@ public class CashpointQuery {
         return query;
     }
 
-    public static String getQueryTransactionsDetails(String deviceId) {
+    public static String getQueryTransactionsDetails(String soCashTxnId) {
         return String.format("SELECT"
                 + " tcp.id_partner_bank AS partnerid,"
                 + " tcp.cashpoint_id AS cashpoint_id,"
@@ -43,6 +43,6 @@ public class CashpointQuery {
                 + "  AND tcp.id_estado_trx = 1"
                 + "  AND cp.cashpoint_id = tcp.cashpoint_id"
                 + "  AND tcp.id_partner_bank = pt.id_partner"
-                + "  AND md.id_moneda = pt.id_moneda", deviceId);
+                + "  AND md.id_moneda = pt.id_moneda", soCashTxnId);
     }
 }

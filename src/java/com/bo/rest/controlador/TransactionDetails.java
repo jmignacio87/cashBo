@@ -6,6 +6,7 @@ package com.bo.rest.controlador;
 
 import com.bo.rest.data.CashpointQuery;
 import com.bo.rest.modelos.Token;
+import com.bo.rest.modelos.TransactionDetail;
 import com.bo.rest.utils.DBConnection;
 import com.bo.rest.utils.TokenUtils;
 import com.google.gson.Gson;
@@ -36,18 +37,18 @@ public class TransactionDetails {
 
             JsonObject jsonObject = new JsonParser().parse(subjectToken).getAsJsonObject();
             Token token = this.gson.fromJson(jsonObject, Token.class);
-            TransactionDetails transactionDetailsBody = this.gson.fromJson(body, TransactionDetails.class);
+            TransactionDetail transactionDetailBody = this.gson.fromJson(body, TransactionDetail.class);
 
-            return this.getResponseTransactionDetail(token).toString();
+            return this.getResponseTransactionDetail(transactionDetailBody).toString();
         } catch (Exception e) {
             return null;
         }
     }
 
-    private JsonObject getResponseTransactionDetail(Token token) {
+    private JsonObject getResponseTransactionDetail(TransactionDetail transactionDetailBody) {
         try {
             Statement statement = connection.createStatement();
-            String query = CashpointQuery.getQueryTransactionsDetails(token.getDeviceId());
+            String query = CashpointQuery.getQueryTransactionsDetails(transactionDetailBody.getSocash_txn_id());
 
             ResultSet result = statement.executeQuery(query);
 
