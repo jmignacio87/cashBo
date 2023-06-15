@@ -56,11 +56,11 @@ public class TransactionDetails {
                 JsonObject jsonResponse = new JsonObject();
 
                 jsonResponse.addProperty("partnerid", result.getString("partnerid"));
-                jsonResponse.addProperty("cashpoint_id", result.getInt("cashpoint_id"));
+                jsonResponse.addProperty("cashpoint_id", result.getString("cashpoint_id"));
                 jsonResponse.addProperty("cashpoint_name", result.getString("cashpoint_name"));
                 jsonResponse.addProperty("amount", result.getInt("amount"));
-                jsonResponse.addProperty("socash_txn_id", result.getInt("socash_txn_id"));
-                jsonResponse.addProperty("bank_txn_id", result.getInt("bank_txn_id"));
+                jsonResponse.addProperty("socash_txn_id", result.getString("socash_txn_id"));
+                jsonResponse.addProperty("bank_txn_id", result.getString("bank_txn_id"));
                 jsonResponse.addProperty("transactionStatus", result.getInt("transactionStatus"));
                 jsonResponse.addProperty("transactionCreationTime", result.getString("transactionCreationTime"));
                 jsonResponse.addProperty("uniqueCustomerIdentifier", result.getString("uniqueCustomerIdentifier"));
