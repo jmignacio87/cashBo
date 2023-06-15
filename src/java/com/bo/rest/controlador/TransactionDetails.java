@@ -35,11 +35,15 @@ public class TransactionDetails {
                 subjectToken = TokenUtils.getSubject(bearerToken);
             }
 
-            JsonObject jsonObject = new JsonParser().parse(subjectToken).getAsJsonObject();
-            Token token = this.gson.fromJson(jsonObject, Token.class);
             TransactionDetail transactionDetailBody = this.gson.fromJson(body, TransactionDetail.class);
 
-            return this.getResponseTransactionDetail(transactionDetailBody).toString();
+            JsonObject response = new JsonObject();
+            response.addProperty("code", 0);
+            response.addProperty("message", "success");
+            response.add("data", this.getResponseTransactionDetail(transactionDetailBody));
+
+            return response.toString();
+
         } catch (Exception e) {
             return null;
         }
