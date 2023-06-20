@@ -45,4 +45,12 @@ public class CashpointQuery {
                 + "  AND tcp.id_partner_bank = pt.id_partner"
                 + "  AND md.id_moneda = pt.id_moneda", soCashTxnId);
     }
+
+    public static String getQueryGave(String socash_txn_id, Integer monto) {
+        return String.format("select"
+                + " case when id_estado_trx = 3"
+                + " then 'aprobado'"
+                + " else 'error -1'end as estado"
+                + " from trx_codigopin where socash_txn_id = '%s' and monto = %s", monto, socash_txn_id);
+    }
 }

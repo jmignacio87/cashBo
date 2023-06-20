@@ -75,8 +75,17 @@ public class cashpoint {
     @Path("/gave")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response gave() {
-        return Response.ok().entity("").build();
+    public Response gave(@Context HttpHeaders headers, String body) {
+
+        String authorization = headers.getRequestHeader("Authorization").get(0);
+
+        if (authorization.startsWith("Bearer")) {
+            //TransactionDetails transactionDetails = new TransactionDetails();
+
+            //return Response.ok().entity(transactionDetails.getTransactionDetail(authorization, body)).build();
+        }
+
+        return Response.serverError().build();
     }
 
 }
