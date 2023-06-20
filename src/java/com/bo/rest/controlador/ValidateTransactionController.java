@@ -53,7 +53,7 @@ public class ValidateTransactionController {
 
             if (result.next()) {
                 String estado = result.getString("ESTADO");
-                Integer partnerid = result.getInt("partnerid");
+                String partnerid = result.getString("partnerid");
                 if (estado.equals("nuevo")) {
                     query = CashpointQuery.getQueryUpdateTransaction(validateTransaction.getRequestId(), validateTransaction.getSocash_txn_id(), validateTransaction.getRandom_code());
 
