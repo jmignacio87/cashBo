@@ -50,7 +50,26 @@ public class CashpointQuery {
         return String.format("select"
                 + " case when id_estado_trx = 3"
                 + " then 'aprobado'"
-                + " else 'error -1'end as estado"
-                + " from trx_codigopin where socash_txn_id = '%s' and monto = %s", monto, socash_txn_id);
+                + " else 'error -1' end as estado"
+                + " from trx_codigopin where socash_txn_id = '%s' and monto = %d", socash_txn_id, monto);
+    }
+
+    public static String getQueryValidateTransaction(String socash_txn_id, Integer random_code) {
+        return String.format("select"
+                + " case"
+                + " when id_estado_trx = 1 then 'nuevo'"
+                + " when id_estado_trx = 2 then 'Expirado'"
+                + " when id_estado_trx = 3 then 'Confirmado'"
+                + " end as ESTADO, id_partner_bank as partnerid"
+                + " from trx_codigopin"
+                + " where socash_txn_id = '%s' and"
+                + " random_code = '%d'", socash_txn_id, random_code);
+    }
+
+    public static String getQueryUpdateTransaction(String requestid, String socash_txn_id, Integer random_code) {
+        return String.format("update trx_codigopin"
+                + " set id_estado_trx = 3, requestid = '%s'"
+                + " where socash_txn_id = '%s' and"
+                + " random_code = '%d'", requestid, socash_txn_id, random_code);
     }
 }

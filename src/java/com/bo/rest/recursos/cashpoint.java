@@ -4,6 +4,7 @@ import com.bo.rest.controlador.GaveController;
 import com.bo.rest.controlador.Login;
 import com.bo.rest.controlador.TransactionDetails;
 import com.bo.rest.controlador.Transactions;
+import com.bo.rest.controlador.ValidateTransactionController;
 import com.bo.rest.utils.TypeUtils;
 
 import javax.ws.rs.Consumes;
@@ -68,8 +69,16 @@ public class cashpoint {
     @Path("/request/validate-transaction")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response validateTransaction() {
-        return Response.ok().entity("").build();
+    public Response validateTransaction(@Context HttpHeaders headers, String body) {
+        String authorization = headers.getRequestHeader("Authorization").get(0);
+
+        if (authorization.startsWith("Bearer")) {
+            ValidateTransactionController controller = new ValidateTransactionController();
+
+            return Response.ok().entity(controller.getValidateTransactionRequest(authorization, body)).build();
+        }
+
+        return Response.serverError().build();
     }
 
     @POST
