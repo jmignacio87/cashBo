@@ -1,5 +1,6 @@
 package com.bo.rest.recursos;
 
+import com.bo.rest.controlador.GaveController;
 import com.bo.rest.controlador.Login;
 import com.bo.rest.controlador.TransactionDetails;
 import com.bo.rest.controlador.Transactions;
@@ -80,9 +81,9 @@ public class cashpoint {
         String authorization = headers.getRequestHeader("Authorization").get(0);
 
         if (authorization.startsWith("Bearer")) {
-            //TransactionDetails transactionDetails = new TransactionDetails();
+            GaveController gaveController = new GaveController();
 
-            //return Response.ok().entity(transactionDetails.getTransactionDetail(authorization, body)).build();
+            return Response.ok().entity(gaveController.getGaveRequest(authorization, body)).build();
         }
 
         return Response.serverError().build();
