@@ -8,12 +8,12 @@ package com.bo.rest.modelos;
  *
  * @author aarauco2608
  */
-public class Transaction {
+public class TransactionModel {
 
     private String socash_txn_id;
     private Integer queue_number;
 
-    public Transaction() {
+    public TransactionModel() {
     }
 
     public String getSocash_txn_id() {

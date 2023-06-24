@@ -8,7 +8,7 @@ package com.bo.rest.modelos;
  *
  * @author aarauco2608
  */
-public class ValidateTransaction {
+public class ValidateTransactionModel {
 
     private String requestId;
     private String transactionSource;
@@ -18,7 +18,7 @@ public class ValidateTransaction {
     private String qr_string;
     private Integer device_sync_code;
 
-    public ValidateTransaction() {
+    public ValidateTransactionModel() {
     }
 
     public String getRequestId() {

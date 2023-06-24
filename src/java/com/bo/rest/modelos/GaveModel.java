@@ -8,12 +8,12 @@ package com.bo.rest.modelos;
  *
  * @author aarauco2608
  */
-public class Gave {
+public class GaveModel {
 
     private String socash_txn_id;
     private Integer purchase_amount;
 
-    public Gave() {
+    public GaveModel() {
     }
 
     public String getSocash_txn_id() {

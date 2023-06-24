@@ -1,9 +1,9 @@
 package com.bo.rest.recursos;
 
 import com.bo.rest.controlador.GaveController;
-import com.bo.rest.controlador.Login;
-import com.bo.rest.controlador.TransactionDetails;
-import com.bo.rest.controlador.Transactions;
+import com.bo.rest.controlador.LoginController;
+import com.bo.rest.controlador.TransactionDetailsController;
+import com.bo.rest.controlador.TransactionsController;
 import com.bo.rest.controlador.ValidateTransactionController;
 import com.bo.rest.utils.TypeUtils;
 
@@ -29,7 +29,7 @@ public class cashpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getToken(String body) {
-        Login login = new Login();
+        LoginController login = new LoginController();
         return Response.ok().entity(login.singIn(TypeUtils.CASHPOINT, body)).build();
 
     }
@@ -41,7 +41,7 @@ public class cashpoint {
         String authorization = headers.getRequestHeader("Authorization").get(0);
 
         if (authorization.startsWith("Bearer")) {
-            Transactions transactions = new Transactions();
+            TransactionsController transactions = new TransactionsController();
 
             return Response.ok().entity(transactions.getPendingTransactions(authorization)).build();
         }
@@ -57,7 +57,7 @@ public class cashpoint {
         String authorization = headers.getRequestHeader("Authorization").get(0);
 
         if (authorization.startsWith("Bearer")) {
-            TransactionDetails transactionDetails = new TransactionDetails();
+            TransactionDetailsController transactionDetails = new TransactionDetailsController();
 
             return Response.ok().entity(transactionDetails.getTransactionDetail(authorization, body)).build();
         }

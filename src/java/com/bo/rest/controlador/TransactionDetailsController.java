@@ -5,7 +5,7 @@
 package com.bo.rest.controlador;
 
 import com.bo.rest.data.CashpointQuery;
-import com.bo.rest.modelos.Token;
+import com.bo.rest.modelos.TokenModel;
 import com.bo.rest.modelos.TransactionDetail;
 import com.bo.rest.utils.DBConnection;
 import com.bo.rest.utils.TokenUtils;
@@ -20,7 +20,7 @@ import java.sql.Statement;
  *
  * @author aarauco2608
  */
-public class TransactionDetails {
+public class TransactionDetailsController {
 
     private Gson gson = new Gson();
     Connection connection = DBConnection.getConnection();

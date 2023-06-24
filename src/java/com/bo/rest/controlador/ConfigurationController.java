@@ -4,8 +4,8 @@
  */
 package com.bo.rest.controlador;
 
-import com.bo.rest.data.CashpointQuery;
-import com.bo.rest.modelos.ValidateTransactionModel;
+import com.bo.rest.data.PartnerQuery;
+import com.bo.rest.modelos.ConfigurationModel;
 import com.bo.rest.utils.DBConnection;
 import com.bo.rest.utils.TokenUtils;
 import com.google.gson.Gson;
@@ -18,12 +18,12 @@ import java.sql.Statement;
  *
  * @author aarauco2608
  */
-public class ValidateTransactionController {
+public class ConfigurationController {
 
     private Gson gson = new Gson();
     Connection connection = DBConnection.getConnection();
 
-    public String getValidateTransactionRequest(String authorization, String body) {
+    public String getConfiguration(String authorization, ConfigurationModel model) {
         try {
             String bearerToken = authorization.split(" ")[1];
             String subjectToken = "";
@@ -32,44 +32,36 @@ public class ValidateTransactionController {
                 subjectToken = TokenUtils.getSubject(bearerToken);
             }
 
-            ValidateTransactionModel validationTransaction = this.gson.fromJson(body, ValidateTransactionModel.class);
-            return this.getResultQuery(validationTransaction).toString();
+            return this.getResultConfiguration(model).toString();
         } catch (Exception e) {
             return null;
         }
     }
 
-    private JsonObject getResultQuery(ValidateTransactionModel validateTransaction) {
-
+    private JsonObject getResultConfiguration(ConfigurationModel model) {
         JsonObject response = new JsonObject();
         Integer code = -1;
         String message = "";
 
         try {
             Statement statement = connection.createStatement();
-            String query = CashpointQuery.getQueryValidateTransaction(validateTransaction.getSocash_txn_id(), validateTransaction.getRandom_code());
-
+            String query = PartnerQuery.getQueryConfiguration();
             ResultSet result = statement.executeQuery(query);
 
             if (result.next()) {
-                String estado = result.getString("ESTADO");
-                String partnerid = result.getString("partnerid");
-                if (estado.equals("nuevo")) {
-                    query = CashpointQuery.getQueryUpdateTransaction(validateTransaction.getRequestId(), validateTransaction.getSocash_txn_id(), validateTransaction.getRandom_code());
-
-                    statement.execute(query);
-                }
-
                 code = 0;
-                message = "Success";
-
+                message = "success";
+                
                 JsonObject data = new JsonObject();
-                data.addProperty("requestId", validateTransaction.getRequestId());
-                data.addProperty("partnerid", partnerid);
-                data.addProperty("bank_txn_id", validateTransaction.getBank_txn_id());
+                data.addProperty("partnerid", result.getString("partnerid"));
+                data.addProperty("transactiontype", result.getString("transactiontype"));
+                data.addProperty("searchradius", result.getString("searchradius"));
+                data.addProperty("withdrawalCurrency", result.getString("withdrawalCurrency"));
+                data.addProperty("minwithdrawalamountpertransaction", result.getString("minwithdrawalamountpertransaction"));
+                data.addProperty("maxwithdrawalamountpertransaction", result.getString("maxwithdrawalamountpertransaction"));
+                data.addProperty("cust_acct_debited", result.getString("cust_acct_debited"));
+
                 response.add("data", data);
-            } else {
-                throw new Exception();
             }
         } catch (Exception e) {
             code = -1;
@@ -78,6 +70,8 @@ public class ValidateTransactionController {
 
         response.addProperty("code", code);
         response.addProperty("message", message);
+
         return response;
     }
+
 }

@@ -9,7 +9,7 @@ import com.bo.rest.utils.DBConnection;
 import com.bo.rest.utils.TokenUtils;
 import com.google.gson.Gson;
 import java.sql.Connection;
-import com.bo.rest.modelos.Gave;
+import com.bo.rest.modelos.GaveModel;
 import com.google.gson.JsonObject;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -32,7 +32,7 @@ public class GaveController {
                 subjectToken = TokenUtils.getSubject(bearerToken);
             }
 
-            Gave gave = this.gson.fromJson(body, Gave.class);
+            GaveModel gave = this.gson.fromJson(body, GaveModel.class);
 
             return this.getResultQuery(gave).toString();
         } catch (Exception e) {
@@ -40,7 +40,7 @@ public class GaveController {
         }
     }
 
-    private JsonObject getResultQuery(Gave gave) {
+    private JsonObject getResultQuery(GaveModel gave) {
         JsonObject response = new JsonObject();
         Integer code = -1;
         String message = "";

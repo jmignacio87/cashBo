@@ -5,13 +5,13 @@
 package com.bo.rest.controlador;
 
 import com.bo.rest.data.CashpointQuery;
-import com.bo.rest.modelos.Token;
+import com.bo.rest.modelos.TokenModel;
 import com.bo.rest.utils.TokenUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import com.bo.rest.modelos.Transaction;
+import com.bo.rest.modelos.TransactionModel;
 import com.bo.rest.utils.DBConnection;
 import com.google.gson.JsonArray;
 import java.sql.Connection;
@@ -24,12 +24,12 @@ import java.util.LinkedList;
  *
  * @author aarauco2608
  */
-public class Transactions {
+public class TransactionsController {
     
     private Gson gson = new Gson();
     Connection connection = DBConnection.getConnection();
     
-    public Transactions() {
+    public TransactionsController() {
     }
     
     public String getPendingTransactions(String authorization) {
@@ -44,9 +44,9 @@ public class Transactions {
             }
             
             JsonObject jsonObject = new JsonParser().parse(subjectToken).getAsJsonObject();
-            Token token = this.gson.fromJson(jsonObject, Token.class);
+            TokenModel token = this.gson.fromJson(jsonObject, TokenModel.class);
             
-            ArrayList<Transaction> listTransactionPendings = this.getListTransactionPendings(token);
+            ArrayList<TransactionModel> listTransactionPendings = this.getListTransactionPendings(token);
             
             JsonObject response = new JsonObject();
             
@@ -65,16 +65,16 @@ public class Transactions {
         }
     }
     
-    private ArrayList<Transaction> getListTransactionPendings(Token token) {
+    private ArrayList<TransactionModel> getListTransactionPendings(TokenModel token) {
         try {
             Statement statement = connection.createStatement();
             String query = CashpointQuery.getQueryTransactionsPending(token.getDeviceId());
             
             ResultSet result = statement.executeQuery(query);
             
-            ArrayList<Transaction> list = new ArrayList<>();
+            ArrayList<TransactionModel> list = new ArrayList<>();
             while (result.next()) {
-                Transaction transaction = new Transaction();
+                TransactionModel transaction = new TransactionModel();
                 transaction.setSocash_txn_id(result.getString("socash_txn_id"));
                 transaction.setQueue_number(result.getInt("queue_number"));
                 

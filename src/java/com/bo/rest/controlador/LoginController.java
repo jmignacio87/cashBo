@@ -13,13 +13,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import com.bo.rest.modelos.Token;
+import com.bo.rest.modelos.TokenModel;
 
 /**
  *
  * @author aarauco2608
  */
-public class Login {
+public class LoginController {
     
     private Gson gson = new Gson();
     Connection connection = DBConnection.getConnection();
@@ -30,7 +30,7 @@ public class Login {
         String message = "Success";
         
         try {
-            Token tokenBody = this.gson.fromJson(body, Token.class);
+            TokenModel tokenBody = this.gson.fromJson(body, TokenModel.class);
             String credentials = this.getCredentials(source, tokenBody);
             
             if (credentials == null) {
@@ -64,7 +64,7 @@ public class Login {
         return result.toString();
     }
     
-    private String getCredentials(String source, Token token) {
+    private String getCredentials(String source, TokenModel token) {
         try {
             
             Statement statement = connection.createStatement();
