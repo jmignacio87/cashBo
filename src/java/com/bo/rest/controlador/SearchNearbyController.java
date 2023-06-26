@@ -93,6 +93,8 @@ public class SearchNearbyController {
             data.addProperty("partnerid", token.getDeviceId());
             data.add("merchants", merchants);
 
+            response.add("data", data);
+
         } catch (Exception e) {
             code = -1;
             message = "Error";
