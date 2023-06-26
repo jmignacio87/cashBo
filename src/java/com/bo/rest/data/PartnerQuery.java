@@ -41,7 +41,7 @@ public class PartnerQuery {
                 + " cp.estado_habilitado = 'ONLINE'", deviceId);
     }
 
-    public static String getQueryConfiguration() {
+    public static String getQueryConfiguration(String devideId) {
         return String.format("select pt.id_partner as partnerid,  "
                 + " pt.transactiontype as transactiontype,  "
                 + " pt.searchradius as searchradius,  "
@@ -51,8 +51,8 @@ public class PartnerQuery {
                 + " pt.monto_maximo_dia as maxwithdrawalamountperday, "
                 + " pt.cust_acct_debited as cust_acct_debited"
                 + "from partner pt, moneda mnd "
-                + "where pt.id_partner = 'BOBAN004' and "
+                + "where pt.id_partner = '%s' and "
                 + "pt.id_tipo = 1 and"
-                + "pt.id_moneda = mnd.id_moneda ");
+                + "pt.id_moneda = mnd.id_moneda ", devideId);
     }
 }

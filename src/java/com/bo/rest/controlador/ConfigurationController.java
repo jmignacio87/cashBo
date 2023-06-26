@@ -6,10 +6,12 @@ package com.bo.rest.controlador;
 
 import com.bo.rest.data.PartnerQuery;
 import com.bo.rest.modelos.ConfigurationModel;
+import com.bo.rest.modelos.TokenModel;
 import com.bo.rest.utils.DBConnection;
 import com.bo.rest.utils.TokenUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -32,26 +34,29 @@ public class ConfigurationController {
                 subjectToken = TokenUtils.getSubject(bearerToken);
             }
 
-            return this.getResultConfiguration(model).toString();
+            JsonObject jsonObject = new JsonParser().parse(subjectToken).getAsJsonObject();
+            TokenModel token = this.gson.fromJson(jsonObject, TokenModel.class);
+
+            return this.getResultConfiguration(model, token).toString();
         } catch (Exception e) {
             return null;
         }
     }
 
-    private JsonObject getResultConfiguration(ConfigurationModel model) {
+    private JsonObject getResultConfiguration(ConfigurationModel model, TokenModel token) {
         JsonObject response = new JsonObject();
         Integer code = -1;
         String message = "";
 
         try {
             Statement statement = connection.createStatement();
-            String query = PartnerQuery.getQueryConfiguration();
+            String query = PartnerQuery.getQueryConfiguration(token.getDeviceId());
             ResultSet result = statement.executeQuery(query);
 
             if (result.next()) {
                 code = 0;
                 message = "success";
-                
+
                 JsonObject data = new JsonObject();
                 data.addProperty("partnerid", result.getString("partnerid"));
                 data.addProperty("transactiontype", result.getString("transactiontype"));

@@ -58,33 +58,40 @@ public class SearchNearbyController {
             Statement statement = connection.createStatement();
             String query = PartnerQuery.getQuerySearchNearby(token.getDeviceId());
             ResultSet result = statement.executeQuery(query);
-            ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+            //ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+
+            ArrayList<Object> list = new ArrayList<>();
 
             while (result.next()) {
-                HashMap<String, Object> data = new HashMap<String, Object>();
-                data.put("partnerid", result.getString("partnerid"));
-                data.put("address", result.getString("address"));
-                data.put("available_end", result.getString("available_end"));
-                data.put("available_start", result.getString("available_start"));
-                data.put("shop_photo", result.getString("shop_photo"));
-                data.put("id", result.getString("id"));
-                data.put("name", result.getString("name"));
-                data.put("location_lat", result.getString("location_lat"));
-                data.put("location_lng", result.getString("location_lng"));
-                data.put("cashpoint_description", result.getString("cashpoint_description"));
-                data.put("status", result.getString("status"));
+                //HashMap<String, Object> merchant = new HashMap<String, Object>();
+                JsonObject merchant = new JsonObject();
+                merchant.addProperty("partnerid", result.getString("partnerid"));
+                merchant.addProperty("address", result.getString("address"));
+                merchant.addProperty("available_end", result.getString("available_end"));
+                merchant.addProperty("available_start", result.getString("available_start"));
+                merchant.addProperty("shop_photo", result.getString("shop_photo"));
+                merchant.addProperty("id", result.getString("id"));
+                merchant.addProperty("name", result.getString("name"));
+                merchant.addProperty("location_lat", result.getString("location_lat"));
+                merchant.addProperty("location_lng", result.getString("location_lng"));
+                merchant.addProperty("cashpoint_description", result.getString("cashpoint_description"));
+                merchant.addProperty("status", result.getString("status"));
 
-                list.add(data);
+                JsonObject merchantItem = new JsonObject();
+                merchantItem.add("merchant", merchant);
+
+                list.add(merchantItem);
             }
 
             code = 0;
             message = "success";
 
-            JsonArray jsonListTransaction = new Gson().toJsonTree(list).getAsJsonArray();
-            JsonObject jsonTransaction = new JsonObject();
-            jsonTransaction.add("transactions", jsonListTransaction);
+            JsonArray merchants = new Gson().toJsonTree(list).getAsJsonArray();
 
-            response.add("data", jsonTransaction);
+            JsonObject data = new JsonObject();
+            data.addProperty("requestId", model.getRequestId());
+            data.addProperty("partnerid", token.getDeviceId());
+            data.add("merchants", merchants);
 
         } catch (Exception e) {
             code = -1;
