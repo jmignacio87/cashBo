@@ -11,9 +11,9 @@ package com.bo.rest.data;
 public class PartnerQuery {
 
     public static String getQuerySearchNearby(String deviceId, String latitude, String longitude) {
-        String distance = String.format("(SELECT (acos(sin(radians(%s)) * sin(radians(cp.latitud)) "
+        String distance = String.format("(SELECT (acos(sin(radians(%s)) * sin(radians(cp.latitud)) + "
                 + "cos(radians(%s)) * cos(radians(cp.latitud)) * "
-                + "cos(radians(%s) - radians(cp.longitud))) * 6371 *1000)) as distance", latitude, latitude, longitude);
+                + "cos(radians(%s) - radians(cp.longitud))) * 6371 *1000)) as distance, ", latitude, latitude, longitude);
 
         return String.format("select pt.id_partner as partnerid,   "
                 + " cp.localizacion_cashpoint as address,   "
