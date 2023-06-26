@@ -10,7 +10,7 @@ package com.bo.rest.data;
  */
 public class PartnerQuery {
 
-    public static String getQuerySearchNearby() {
+    public static String getQuerySearchNearby(String deviceId) {
         return String.format("select pt.id_partner as partnerid,   "
                 + " cp.localizacion_cashpoint as address,   "
                 + " cph.apertura as available_end,  "
@@ -23,13 +23,22 @@ public class PartnerQuery {
                 + " cp.descripcion_cashpoint as cashpoint_description,  "
                 + " cp.estado_habilitado as status  "
                 + " from partner pt , pbank_cashpoint pbcp, cashpoint cp, cashpoint_horario_atencion cph  "
-                + " where pt.id_partner = 'BOBAN004' and  "
+                + " where pt.id_partner = '%s' and  "
                 + " pt.id_partner = pbcp.id_partner_bank and  "
                 + " pbcp.cashpoint_id = cp.cashpoint_id and  "
                 + " cp.cashpoint_id = cph.cashpoint_id and  "
-                + " cph.id_dia = 4 and   "
-                + " '16:00:00' BETWEEN apertura and cierre and  "
-                + " cp.estado_habilitado = 'ONLINE'");
+                + " cph.id_dia = (select "
+                + "CASE "
+                + "        WHEN DAYOFWEEK(CURDATE()) = 1 THEN 7 "
+                + "        WHEN DAYOFWEEK(CURDATE()) = 2 THEN 1 "
+                + "        WHEN DAYOFWEEK(CURDATE()) = 3 THEN 2 "
+                + "        WHEN DAYOFWEEK(CURDATE()) = 4 THEN 3 "
+                + "        WHEN DAYOFWEEK(CURDATE()) = 5 THEN 4 "
+                + "        WHEN DAYOFWEEK(CURDATE()) = 6 THEN 5 "
+                + "        WHEN DAYOFWEEK(CURDATE()) = 7 THEN 6 "
+                + "    END) and   "
+                + " (SELECT CURRENT_TIME()) BETWEEN apertura and cierre and  "
+                + " cp.estado_habilitado = 'ONLINE'", deviceId);
     }
 
     public static String getQueryConfiguration() {

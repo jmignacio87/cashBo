@@ -6,11 +6,13 @@ package com.bo.rest.controlador;
 
 import com.bo.rest.data.PartnerQuery;
 import com.bo.rest.modelos.SearchNearbyModel;
+import com.bo.rest.modelos.TokenModel;
 import com.bo.rest.utils.DBConnection;
 import com.bo.rest.utils.TokenUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -37,21 +39,24 @@ public class SearchNearbyController {
                 throw new Exception();
             }
 
-            return this.getResultSearchNearby(model).toString();
+            JsonObject jsonObject = new JsonParser().parse(subjectToken).getAsJsonObject();
+            TokenModel token = this.gson.fromJson(jsonObject, TokenModel.class);
+
+            return this.getResultSearchNearby(model, token).toString();
         } catch (Exception e) {
             return null;
         }
 
     }
 
-    private JsonObject getResultSearchNearby(SearchNearbyModel model) {
+    private JsonObject getResultSearchNearby(SearchNearbyModel model, TokenModel token) {
         JsonObject response = new JsonObject();
         Integer code = -1;
         String message = "";
 
         try {
             Statement statement = connection.createStatement();
-            String query = PartnerQuery.getQuerySearchNearby();
+            String query = PartnerQuery.getQuerySearchNearby(token.getDeviceId());
             ResultSet result = statement.executeQuery(query);
             ArrayList<HashMap<String, Object>> list = new ArrayList<>();
 
