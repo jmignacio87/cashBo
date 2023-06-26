@@ -10,9 +10,14 @@ package com.bo.rest.data;
  */
 public class PartnerQuery {
 
-    public static String getQuerySearchNearby(String deviceId) {
+    public static String getQuerySearchNearby(String deviceId, String latitude, String longitude) {
+        String distance = String.format("SELECT (acos(sin(radians(%s)) * sin(radians(cp.latitud)) "
+                + "cos(radians(%s)) * cos(radians(cp.latitud)) * "
+                + "cos(radians(%s) - radians(cp.longitud))) * 6371 *1000) as distance", latitude, latitude, longitude);
+
         return String.format("select pt.id_partner as partnerid,   "
                 + " cp.localizacion_cashpoint as address,   "
+                + " %s"
                 + " cph.apertura as available_end,  "
                 + " cph.cierre as available_start,  "
                 + " cp.imagen_negocio as shop_photo,  "
@@ -38,7 +43,7 @@ public class PartnerQuery {
                 + "        WHEN DAYOFWEEK(CURDATE()) = 7 THEN 6 "
                 + "    END) and   "
                 + " (SELECT CURRENT_TIME()) BETWEEN apertura and cierre and  "
-                + " cp.estado_habilitado = 'ONLINE'", deviceId);
+                + " cp.estado_habilitado = 'ONLINE'", distance, deviceId);
     }
 
     public static String getQueryConfiguration(String devideId) {

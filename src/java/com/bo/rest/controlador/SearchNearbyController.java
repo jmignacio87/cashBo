@@ -56,14 +56,12 @@ public class SearchNearbyController {
 
         try {
             Statement statement = connection.createStatement();
-            String query = PartnerQuery.getQuerySearchNearby(token.getDeviceId());
+            String query = PartnerQuery.getQuerySearchNearby(token.getDeviceId(), model.getLatitude(), model.getLongitude());
             ResultSet result = statement.executeQuery(query);
-            //ArrayList<HashMap<String, Object>> list = new ArrayList<>();
 
             ArrayList<Object> list = new ArrayList<>();
 
             while (result.next()) {
-                //HashMap<String, Object> merchant = new HashMap<String, Object>();
                 JsonObject merchant = new JsonObject();
                 merchant.addProperty("partnerid", result.getString("partnerid"));
                 merchant.addProperty("address", result.getString("address"));
