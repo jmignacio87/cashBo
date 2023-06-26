@@ -74,6 +74,7 @@ public class SearchNearbyController {
                 merchant.addProperty("location_lng", result.getString("location_lng"));
                 merchant.addProperty("cashpoint_description", result.getString("cashpoint_description"));
                 merchant.addProperty("status", result.getString("status"));
+                merchant.addProperty("distance", result.getString("distance"));
 
                 JsonObject merchantItem = new JsonObject();
                 merchantItem.add("merchant", merchant);
