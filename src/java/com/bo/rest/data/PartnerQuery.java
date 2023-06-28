@@ -60,4 +60,16 @@ public class PartnerQuery {
                 + "pt.id_tipo = 1 and"
                 + "pt.id_moneda = mnd.id_moneda ", devideId);
     }
+
+    public static String getQueryTransactionStatus(String socash_txn_id) {
+        return String.format("select  "
+                + " trx.id_partner_bank as partnerid,  "
+                + " trx.socash_txn_id as socash_txn_id,  "
+                + " e.nombre as transactionStatus,  "
+                + " trx.bank_txn_id as bank_txn_id "
+                + " from trx_codigopin trx, estado_trx e "
+                + " where  "
+                + " socash_txn_id = '%s' and "
+                + " trx.id_estado_trx = e.id_estado_trx", socash_txn_id);
+    }
 }

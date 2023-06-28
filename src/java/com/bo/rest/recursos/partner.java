@@ -7,8 +7,10 @@ package com.bo.rest.recursos;
 import com.bo.rest.controlador.ConfigurationController;
 import com.bo.rest.controlador.LoginController;
 import com.bo.rest.controlador.SearchNearbyController;
+import com.bo.rest.controlador.TransactionStatusController;
 import com.bo.rest.modelos.ConfigurationModel;
 import com.bo.rest.modelos.SearchNearbyModel;
+import com.bo.rest.modelos.TransactionStatusModel;
 import com.bo.rest.utils.TypeUtils;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -76,6 +78,23 @@ public class partner {
             ConfigurationController controller = new ConfigurationController();
             return Response.ok().entity(controller.getConfiguration(authorization, model)).build();
 
+        }
+
+        return Response.serverError().build();
+    }
+
+    @GET
+    @Path("/transaction-status")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTransactionStatus(@Context HttpHeaders headers, @Context UriInfo parameters) {
+        String authorization = headers.getRequestHeader("Authorization").get(0);
+
+        if (authorization.startsWith("Bearer")) {
+            TransactionStatusModel model = new TransactionStatusModel();
+            model.setSocash_txn_id(parameters.getQueryParameters().getFirst("socash_txn_id"));
+            
+            TransactionStatusController controller = new TransactionStatusController();
+            return Response.ok().entity(controller.getTransactionStatus(authorization, model)).build();
         }
 
         return Response.serverError().build();
