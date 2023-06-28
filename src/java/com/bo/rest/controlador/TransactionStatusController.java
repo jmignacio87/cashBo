@@ -58,6 +58,9 @@ public class TransactionStatusController {
 
                 response.add("data", data);
             }
+
+            code = 0;
+            message = "success";
         } catch (Exception e) {
             code = -1;
             message = "Error";
