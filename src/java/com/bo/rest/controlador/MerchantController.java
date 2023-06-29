@@ -43,7 +43,7 @@ public class MerchantController {
             TokenModel token = this.gson.fromJson(jsonObject, TokenModel.class);
 
             JsonObject jsonMerchant = new JsonParser().parse(body).getAsJsonObject();
-            MerchantModel model = this.gson.fromJson(jsonObject, MerchantModel.class);
+            MerchantModel model = this.gson.fromJson(jsonMerchant, MerchantModel.class);
 
             return this.getResponseMerchant(model, token).toString();
         } catch (Exception e) {
