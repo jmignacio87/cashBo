@@ -73,8 +73,8 @@ public class PartnerQuery {
                 + " trx.id_estado_trx = e.id_estado_trx", socash_txn_id);
     }
 
-    public static String getQueryMerchant() {
-        return " select  "
+    public static String getQueryMerchant(String cashpoint_id_out) {
+        return String.format(" select  "
                 + "	trx.id_partner_bank as 		 partnerid,  "
                 + "	trx.cashpoint_id as 		 cashpoint_id,  "
                 + "	cp.nombre_cashpoint as 		 cashpoint_name,  "
@@ -93,10 +93,10 @@ public class PartnerQuery {
                 + "	trx.random_code as 			 random_code 	 "
                 + " from trx_codigopin trx , cashpoint cp, moneda m, estado_trx e, partner pt "
                 + " where   "
-                + "	trx.socash_txn_id = 		select @cashpoint_id_out and  "
+                + "	trx.socash_txn_id = 		'%s' and  "
                 + "	trx.cashpoint_id = 			cp.cashpoint_id and  "
                 + "	pt.id_moneda = 				m.id_moneda and "
                 + "	trx.id_estado_trx = 		e.id_estado_trx and "
-                + "	trx.id_partner_bank = 	pt.id_partner";
+                + "	trx.id_partner_bank = 	pt.id_partner", cashpoint_id_out);
     }
 }

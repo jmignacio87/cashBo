@@ -12,9 +12,11 @@ import com.bo.rest.utils.TokenUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Types;
 
 /**
  *
@@ -55,17 +57,23 @@ public class MerchantController {
         String message = "";
 
         try {
+            String queryStoreProcedure = "{call request_merchant(?,?,?,?,?,?,?,?)}";
+            CallableStatement cs = null;
+            cs = connection.prepareCall(queryStoreProcedure);
+            cs.setString(1, model.getTransactionSource());
+            cs.setString(2, token.getDeviceId());
+            cs.setInt(3, model.getAmount());
+            cs.setString(4, model.getCashpoint_id());
+            cs.setString(5, model.getPosition_lat());
+            cs.setString(6, model.getPosition_lng());
+            cs.setString(7, model.getAddress());
+            cs.registerOutParameter(8, Types.VARCHAR);
+            cs.execute();
+
+            String cashpoint_id_out = cs.getString(8);
+
             Statement statement = connection.createStatement();
-            String queryStoreProcedure = String.format("call request_merchant('%s','%s',%s,'%s', '%s', '%s','%s', @cashpoint_id_out)",
-                    model.getTransactionSource(), token.getDeviceId(),
-                    model.getAmount(), model.getCashpoint_id(),
-                    model.getPosition_lat(), model.getPosition_lng(),
-                    model.getAddress());
-
-            statement.execute(queryStoreProcedure);
-            statement.execute("select @cashpoint_id_out");
-
-            String queryMerchant = PartnerQuery.getQueryMerchant();
+            String queryMerchant = PartnerQuery.getQueryMerchant(cashpoint_id_out);
             ResultSet result = statement.executeQuery(queryMerchant);
 
             if (result.next()) {
