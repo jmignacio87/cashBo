@@ -6,6 +6,7 @@ package com.bo.rest.recursos;
 
 import com.bo.rest.controlador.ConfigurationController;
 import com.bo.rest.controlador.LoginController;
+import com.bo.rest.controlador.MerchantController;
 import com.bo.rest.controlador.SearchNearbyController;
 import com.bo.rest.controlador.TransactionStatusController;
 import com.bo.rest.modelos.ConfigurationModel;
@@ -92,9 +93,26 @@ public class partner {
         if (authorization.startsWith("Bearer")) {
             TransactionStatusModel model = new TransactionStatusModel();
             model.setSocash_txn_id(parameters.getQueryParameters().getFirst("socash_txn_id"));
-            
+
             TransactionStatusController controller = new TransactionStatusController();
             return Response.ok().entity(controller.getTransactionStatus(authorization, model)).build();
+        }
+
+        return Response.serverError().build();
+    }
+
+    @POST
+    @Path("/requests/merchant/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMerchant(@Context HttpHeaders headers, String body) {
+
+        String authorization = headers.getRequestHeader("Authorization").get(0);
+
+        if (authorization.startsWith("Bearer")) {
+            MerchantController controller = new MerchantController();
+
+            return Response.ok().entity(controller.getMerchant(authorization, body)).build();
         }
 
         return Response.serverError().build();

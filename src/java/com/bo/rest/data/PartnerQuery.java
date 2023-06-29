@@ -72,4 +72,31 @@ public class PartnerQuery {
                 + " socash_txn_id = '%s' and "
                 + " trx.id_estado_trx = e.id_estado_trx", socash_txn_id);
     }
+
+    public static String getQueryMerchant() {
+        return " select  "
+                + "	trx.id_partner_bank as 		 partnerid,  "
+                + "	trx.cashpoint_id as 		 cashpoint_id,  "
+                + "	cp.nombre_cashpoint as 		 cashpoint_name,  "
+                + "	cp.telefono_negocio as 		 cashpoint_phone, "
+                + "	cp.localizacion_cashpoint as cashpoint_address, "
+                + "	cp.latitud as 				 cashpoint_latitude,  "
+                + "	cp.longitud as 				 cashpoint_longitude, "
+                + "	cp.descripcion_cashpoint as  cashpoint_description,  "
+                + "	trx.monto as 				 amount,  "
+                + "	m.sigla as 					 withdrawalCurrency, "
+                + "	trx.socash_txn_id as		 socash_txn_id, "
+                + "	e.nombre as 				 transactionStatus,  "
+                + "	pt.transactiontype as 		 transactiontype,  "
+                + "	trx.queue_number as 		 queue_number,  "
+                + "	trx.fecha_creacion as 		 transactionCreationTime,  "
+                + "	trx.random_code as 			 random_code 	 "
+                + " from trx_codigopin trx , cashpoint cp, moneda m, estado_trx e, partner pt "
+                + " where   "
+                + "	trx.socash_txn_id = 		select @cashpoint_id_out and  "
+                + "	trx.cashpoint_id = 			cp.cashpoint_id and  "
+                + "	pt.id_moneda = 				m.id_moneda and "
+                + "	trx.id_estado_trx = 		e.id_estado_trx and "
+                + "	trx.id_partner_bank = 	pt.id_partner";
+    }
 }
