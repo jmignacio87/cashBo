@@ -8,6 +8,7 @@ import com.bo.rest.data.PartnerQuery;
 import com.bo.rest.modelos.ConfigurationModel;
 import com.bo.rest.modelos.TokenModel;
 import com.bo.rest.utils.DBConnection;
+import com.bo.rest.utils.LogsUtils;
 import com.bo.rest.utils.TokenUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -15,6 +16,7 @@ import com.google.gson.JsonParser;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import org.slf4j.Logger;
 
 /**
  *
@@ -22,16 +24,26 @@ import java.sql.Statement;
  */
 public class ConfigurationController {
 
+    private Logger logger;
     private Gson gson = new Gson();
     Connection connection = DBConnection.getConnection();
 
+    public ConfigurationController() {
+        this.logger = LogsUtils.getLogger("CONFIGURATION");
+    }
+
     public String getConfiguration(String authorization, ConfigurationModel model) {
         try {
+            this.logger.debug("Get Configuration Parametros: token: {} | configuration model: {}", authorization, this.gson.toJson(model));
             String bearerToken = authorization.split(" ")[1];
             String subjectToken = "";
 
             if (TokenUtils.verifyJwt(bearerToken)) {
+                this.logger.debug("Token Valido");
                 subjectToken = TokenUtils.getSubject(bearerToken);
+            } else {
+                this.logger.debug("Token expirado");
+                throw new Exception();
             }
 
             JsonObject jsonObject = new JsonParser().parse(subjectToken).getAsJsonObject();
@@ -39,6 +51,7 @@ public class ConfigurationController {
 
             return this.getResultConfiguration(model, token).toString();
         } catch (Exception e) {
+            this.logger.debug("Exception Configuration: {}", e.toString());
             return null;
         }
     }
@@ -51,6 +64,7 @@ public class ConfigurationController {
         try {
             Statement statement = connection.createStatement();
             String query = PartnerQuery.getQueryConfiguration(token.getDeviceId());
+            this.logger.debug("Query Configuration: {}", query);
             ResultSet result = statement.executeQuery(query);
 
             if (result.next()) {
@@ -71,6 +85,7 @@ public class ConfigurationController {
         } catch (Exception e) {
             code = -1;
             message = "Error";
+            this.logger.debug("Exception Query Configuration: {}", e.toString());
         }
 
         response.addProperty("code", code);

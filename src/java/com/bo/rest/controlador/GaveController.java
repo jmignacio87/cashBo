@@ -10,9 +10,11 @@ import com.bo.rest.utils.TokenUtils;
 import com.google.gson.Gson;
 import java.sql.Connection;
 import com.bo.rest.modelos.GaveModel;
+import com.bo.rest.utils.LogsUtils;
 import com.google.gson.JsonObject;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import org.slf4j.Logger;
 
 /**
  *
@@ -20,22 +22,33 @@ import java.sql.Statement;
  */
 public class GaveController {
 
+    private Logger logger;
     private Gson gson = new Gson();
     Connection connection = DBConnection.getConnection();
 
+    public GaveController() {
+        this.logger = LogsUtils.getLogger("GAVE");
+    }
+
     public String getGaveRequest(String authorization, String body) {
         try {
+            this.logger.debug("Gave Parametros: token: {} | body: {}", authorization, body);
             String bearerToken = authorization.split(" ")[1];
             String subjectToken = "";
 
             if (TokenUtils.verifyJwt(bearerToken)) {
+                this.logger.debug("Token valido");
                 subjectToken = TokenUtils.getSubject(bearerToken);
+            } else {
+                this.logger.debug("Token expirado");
+                throw new Exception();
             }
 
             GaveModel gave = this.gson.fromJson(body, GaveModel.class);
 
             return this.getResultQuery(gave).toString();
         } catch (Exception e) {
+            this.logger.debug("Exception Gave: {}", e.toString());
             return null;
         }
     }
@@ -49,6 +62,8 @@ public class GaveController {
             Statement statement = connection.createStatement();
             String query = CashpointQuery.getQueryGave(gave.getSocash_txn_id(), gave.getPurchase_amount());
 
+            this.logger.debug("Query Gave: {}", query);
+
             ResultSet result = statement.executeQuery(query);
 
             if (result.next()) {
@@ -60,6 +75,7 @@ public class GaveController {
         } catch (Exception e) {
             code = -1;
             message = "Error";
+            this.logger.debug("Exception Query Gave: {}", e.toString());
         }
 
         response.addProperty("code", code);

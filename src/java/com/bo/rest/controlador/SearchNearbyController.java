@@ -8,6 +8,7 @@ import com.bo.rest.data.PartnerQuery;
 import com.bo.rest.modelos.SearchNearbyModel;
 import com.bo.rest.modelos.TokenModel;
 import com.bo.rest.utils.DBConnection;
+import com.bo.rest.utils.LogsUtils;
 import com.bo.rest.utils.TokenUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -18,49 +19,60 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.slf4j.Logger;
 
 /**
  *
  * @author aarauco2608
  */
 public class SearchNearbyController {
-
+    
+    private Logger logger;
     private Gson gson = new Gson();
     Connection connection = DBConnection.getConnection();
-
+    
+    public SearchNearbyController() {
+        this.logger = LogsUtils.getLogger("SEARCH_NEARBY");
+    }
+    
     public String getSearchNearby(String authorization, SearchNearbyModel model) {
         try {
+            this.logger.debug("Search Nearby Method Parametros: token: {} | Model: {}", authorization, this.gson.toJson(model));
             String bearerToken = authorization.split(" ")[1];
             String subjectToken = "";
-
+            
             if (TokenUtils.verifyJwt(bearerToken)) {
                 subjectToken = TokenUtils.getSubject(bearerToken);
+                this.logger.debug("Token Valido");
             } else {
+                this.logger.debug("Token Expirado");
                 throw new Exception();
             }
-
+            
             JsonObject jsonObject = new JsonParser().parse(subjectToken).getAsJsonObject();
             TokenModel token = this.gson.fromJson(jsonObject, TokenModel.class);
-
+            
             return this.getResultSearchNearby(model, token).toString();
         } catch (Exception e) {
+            this.logger.debug("Exception Search Nearby: {}", e.toString());
             return null;
         }
-
+        
     }
-
+    
     private JsonObject getResultSearchNearby(SearchNearbyModel model, TokenModel token) {
         JsonObject response = new JsonObject();
         Integer code = -1;
         String message = "";
-
+        
         try {
             Statement statement = connection.createStatement();
             String query = PartnerQuery.getQuerySearchNearby(token.getDeviceId(), model.getLatitude(), model.getLongitude());
+            this.logger.debug("Query Search Nearby", query);
             ResultSet result = statement.executeQuery(query);
-
+            
             ArrayList<Object> list = new ArrayList<>();
-
+            
             while (result.next()) {
                 JsonObject merchant = new JsonObject();
                 merchant.addProperty("partnerid", result.getString("partnerid"));
@@ -75,33 +87,34 @@ public class SearchNearbyController {
                 merchant.addProperty("cashpoint_description", result.getString("cashpoint_description"));
                 merchant.addProperty("status", result.getString("status"));
                 merchant.addProperty("distance", result.getString("distance"));
-
+                
                 JsonObject merchantItem = new JsonObject();
                 merchantItem.add("merchant", merchant);
-
+                
                 list.add(merchantItem);
             }
-
+            
             code = 0;
             message = "success";
-
+            
             JsonArray merchants = new Gson().toJsonTree(list).getAsJsonArray();
-
+            
             JsonObject data = new JsonObject();
             data.addProperty("requestId", model.getRequestId());
             data.addProperty("partnerid", token.getDeviceId());
             data.add("merchants", merchants);
-
+            
             response.add("data", data);
-
+            
         } catch (Exception e) {
             code = -1;
             message = "Error";
+            this.logger.debug("Exception Query Search Nearby: {}", e.toString());
         }
-
+        
         response.addProperty("code", code);
         response.addProperty("message", message);
-
+        
         return response;
     }
 }
