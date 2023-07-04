@@ -6,7 +6,7 @@ import com.bo.rest.utils.TypeUtils;
  *
  * @author IGNACIO
  */
-public class Token {
+public class TokenModel {
 
     private String apiKey;
     private String password;
@@ -21,7 +21,7 @@ public class Token {
 
     private Integer type = 0;
 
-    public Token(String apiKey, String password, String deviceId) {
+    public TokenModel(String apiKey, String password, String deviceId) {
         this.apiKey = apiKey;
         this.password = password;
         this.deviceId = deviceId;
@@ -81,9 +81,9 @@ public class Token {
 
     public void setType(String source) {
         if (source.equals(TypeUtils.CASHPOINT)) {
-            this.type = 2;
+            this.type = TypeUtils.CASHPOINT_VALUE;
         } else if (source.equals(TypeUtils.PARTNER)) {
-            this.type = 1;
+            this.type = TypeUtils.PARTNER_VALUE;
         }
     }
 

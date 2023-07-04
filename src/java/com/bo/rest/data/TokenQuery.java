@@ -4,7 +4,7 @@
  */
 package com.bo.rest.data;
 
-import com.bo.rest.modelos.Token;
+import com.bo.rest.modelos.TokenModel;
 import com.bo.rest.utils.TypeUtils;
 
 /**
@@ -13,7 +13,7 @@ import com.bo.rest.utils.TypeUtils;
  */
 public class TokenQuery {
 
-    public static String getQueryToken(String source, Token token) {
+    public static String getQueryToken(String source, TokenModel token) {
         String query = null;
 
         try {
