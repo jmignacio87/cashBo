@@ -15,6 +15,7 @@ import java.sql.Statement;
 
 import com.bo.rest.modelos.TokenModel;
 import com.bo.rest.utils.LogsUtils;
+import com.bo.rest.utils.TypeUtils;
 import org.slf4j.Logger;
 
 /**
@@ -23,6 +24,12 @@ import org.slf4j.Logger;
  */
 public class LoginController {
 
+    /*
+    Steps
+    1. Get Credentials
+    2. SQL funcion
+    
+     */
     private Logger logger;
 
     private Gson gson = new Gson();
@@ -90,6 +97,18 @@ public class LoginController {
             if (result.next()) {
                 token.setPassword(null);
                 token.setType(source);
+
+                if (source.equals(TypeUtils.PARTNER)) {
+                    query = String.format("select validar_cliente_bank(%s, %s, %s)",
+                            token.getUniqueCustomerIdentifier(),
+                            token.getDeviceId(),
+                            token.getEmail());
+
+                    this.logger.debug("Query Verificar Cliente: {}", query);
+
+                    statement.executeQuery(query);
+                }
+
                 return this.gson.toJson(token);
             }
 
