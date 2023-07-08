@@ -87,27 +87,29 @@ public class LoginController {
 
     private String getCredentials(String source, TokenModel token) {
         try {
-
             Statement statement = connection.createStatement();
-            String query = TokenQuery.getQueryToken(source, token);
+            String query = "";
+
+            if (source.equals(TypeUtils.PARTNER)) {
+                query = String.format("select validar_cliente_bank(%s, %s, %s, %s)",
+                        token.getUniqueCustomerIdentifier(),
+                        token.getDeviceId(),
+                        token.getEmail(),
+                        token.getApiKey());
+
+                this.logger.debug("Query Validar Cliente Bank: {}", query);
+
+                statement.executeQuery(query);
+            }
+
+            //Actualizar Query Token -> Partner
+            query = TokenQuery.getQueryToken(source, token);
             this.logger.debug("Query Credenciales: {}", query);
 
             ResultSet result = statement.executeQuery(query);
-
             if (result.next()) {
                 token.setPassword(null);
                 token.setType(source);
-
-                if (source.equals(TypeUtils.PARTNER)) {
-                    query = String.format("select validar_cliente_bank(%s, %s, %s)",
-                            token.getUniqueCustomerIdentifier(),
-                            token.getDeviceId(),
-                            token.getEmail());
-
-                    this.logger.debug("Query Verificar Cliente: {}", query);
-
-                    statement.executeQuery(query);
-                }
 
                 return this.gson.toJson(token);
             }
