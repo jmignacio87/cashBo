@@ -55,10 +55,10 @@ public class PartnerQuery {
                 + " pt.monto_maximo as maxwithdrawalamountpertransaction, "
                 + " pt.monto_maximo_dia as maxwithdrawalamountperday, "
                 + " pt.cust_acct_debited as cust_acct_debited"
-                + "from partner pt, moneda mnd "
-                + "where pt.id_partner = '%s' and "
-                + "pt.id_tipo = 1 and"
-                + "pt.id_moneda = mnd.id_moneda ", devideId);
+                + " from partner pt, moneda mnd "
+                + " where pt.id_partner = '%s' and "
+                + " pt.id_tipo = 1 and"
+                + " pt.id_moneda = mnd.id_moneda ", devideId);
     }
 
     public static String getQueryTransactionStatus(String socash_txn_id) {
