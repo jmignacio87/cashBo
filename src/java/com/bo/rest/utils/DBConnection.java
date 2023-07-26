@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public class DBConnection {
 
     private static final String URL = "jdbc:mysql://localhost:3306/cashbo?autoReconnect=true&useSSL=false";
-    private static final String USERNAME = "root";
+    private static final String USERNAME = "jignacio";
     private static final String PASSWORD = "";
     private static Connection connection;
 

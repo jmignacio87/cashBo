@@ -68,7 +68,7 @@ public class CashpointQuery {
 
     public static String getQueryUpdateTransaction(String requestid, String socash_txn_id, Integer random_code) {
         return String.format("update trx_codigopin"
-                + " set id_estado_trx = 3, requestid = '%s'"
+                + " set id_estado_trx = 3, fecha_proceso = NOW(), requestid = '%s'"
                 + " where socash_txn_id = '%s' and"
                 + " random_code = '%d'", requestid, socash_txn_id, random_code);
     }
