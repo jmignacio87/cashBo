@@ -94,7 +94,7 @@ public class MerchantController {
             
             cs.execute();
             
-            String cashpoint_id_out = cs.getString(8);
+            String cashpoint_id_out = cs.getString(9);
             
             Statement statement = connection.createStatement();
             String queryMerchant = PartnerQuery.getQueryMerchant(cashpoint_id_out);
