@@ -67,7 +67,7 @@ public class MerchantController {
         String message = "";
         
         try {
-            String queryStoreProcedure = "{call request_merchant(?,?,?,?,?,?,?,?)}";
+            String queryStoreProcedure = "{call request_merchant(?,?,?,?,?,?,?,?,?)}";
             CallableStatement cs = null;
             cs = connection.prepareCall(queryStoreProcedure);
             cs.setString(1, model.getTransactionSource());
@@ -77,17 +77,19 @@ public class MerchantController {
             cs.setString(5, model.getPosition_lat());
             cs.setString(6, model.getPosition_lng());
             cs.setString(7, model.getAddress());
-            cs.registerOutParameter(8, Types.VARCHAR);
+            cs.setString(8, token.getUniqueCustomerIdentifier());
+            cs.registerOutParameter(9, Types.VARCHAR);
             
             this.logger.debug("Query SP request_merchant: {}", queryStoreProcedure);
-            this.logger.debug("Query SP request_merchant parametros: {} | {} | {}| {} | {} | {} | {}",
+            this.logger.debug("Query SP request_merchant parametros: {} | {} | {}| {} | {} | {} | {} | {}",
                     model.getTransactionSource(),
                     token.getDeviceId(),
                     model.getAmount(),
                     model.getCashpoint_id(),
                     model.getPosition_lat(),
                     model.getPosition_lng(),
-                    model.getAddress()
+                    model.getAddress(),
+                    token.getUniqueCustomerIdentifier()
             );
             
             cs.execute();
