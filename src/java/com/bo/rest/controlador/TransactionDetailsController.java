@@ -83,6 +83,9 @@ public class TransactionDetailsController {
                 jsonResponse.addProperty("queue_number", result.getInt("queue_number"));
                 jsonResponse.addProperty("cashpoint_latitude", result.getString("cashpoint_latitude"));
                 jsonResponse.addProperty("cashpoint_longitude", result.getString("cashpoint_longitude"));
+                jsonResponse.addProperty("random_code", result.getInt("random_code"));
+                jsonResponse.addProperty("customerName", "");
+                jsonResponse.addProperty("paymentMethodId", "");
 
                 return jsonResponse;
             }

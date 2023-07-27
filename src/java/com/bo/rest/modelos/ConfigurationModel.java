@@ -10,17 +10,17 @@ package com.bo.rest.modelos;
  */
 public class ConfigurationModel {
 
-    private Integer requestId;
+    private String requestId;
     private String partnerid;
 
     public ConfigurationModel() {
     }
 
-    public Integer getRequestId() {
+    public String getRequestId() {
         return requestId;
     }
 
-    public void setRequestId(Integer requestId) {
+    public void setRequestId(String requestId) {
         this.requestId = requestId;
     }
 

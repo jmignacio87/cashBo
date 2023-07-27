@@ -16,6 +16,7 @@ import java.sql.Statement;
 import com.bo.rest.modelos.TokenModel;
 import com.bo.rest.utils.LogsUtils;
 import com.bo.rest.utils.TypeUtils;
+import java.sql.CallableStatement;
 import org.slf4j.Logger;
 
 /**
@@ -91,15 +92,20 @@ public class LoginController {
             String query = "";
 
             if (source.equals(TypeUtils.PARTNER)) {
-                query = String.format("select validar_cliente_bank(%s, %s, %s, %s)",
-                        token.getUniqueCustomerIdentifier(),
-                        token.getDeviceId(),
-                        token.getEmail(),
-                        token.getApiKey());
-
-                this.logger.debug("Query Validar Cliente Bank: {}", query);
-
-                statement.executeQuery(query);
+                String queryStoreProcedure = "{call validar_cliente_bank(?,?,?,?)}";
+                CallableStatement cs = null;
+                cs = connection.prepareCall(queryStoreProcedure);
+                cs.setString(1, token.getUniqueCustomerIdentifier());
+                cs.setString(2, token.getDeviceId());
+                cs.setString(3, token.getEmail());
+                cs.setString(4, token.getApiKey());
+          
+                //this.logger.debug("debug: {}", cs.toString());
+                this.logger.debug("Query Validar Cliente Bank: {}", queryStoreProcedure);
+                this.logger.debug("Query Validar Cliente Bank parametros: {}| {}| {}| {}", 
+                        token.getUniqueCustomerIdentifier(), token.getDeviceId(), token.getEmail(), token.getApiKey());
+                
+                cs.execute();                
             }
 
             //Actualizar Query Token -> Partner
@@ -110,7 +116,9 @@ public class LoginController {
             if (result.next()) {
                 token.setPassword(null);
                 token.setType(source);
-
+                if(source.equals(TypeUtils.PARTNER)){
+                    token.setDeviceId(result.getString("partnerid"));
+                }
                 return this.gson.toJson(token);
             }
 

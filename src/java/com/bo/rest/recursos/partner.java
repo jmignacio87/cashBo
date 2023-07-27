@@ -69,18 +69,23 @@ public class partner {
     @Path("/getconfiguration")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getConfiguration(@Context HttpHeaders headers, @Context UriInfo parameters) {
-        String authorization = headers.getRequestHeader("Authorization").get(0);
+        try {
+            String authorization = headers.getRequestHeader("Authorization").get(0);
 
-        if (authorization.startsWith("Bearer")) {
-            ConfigurationModel model = new ConfigurationModel();
-            model.setRequestId(Integer.valueOf(parameters.getQueryParameters().getFirst("requestId")));
-            model.setPartnerid(parameters.getQueryParameters().getFirst("partnerid"));
+            if (authorization.startsWith("Bearer")) {
+                ConfigurationModel model = new ConfigurationModel();
+                model.setRequestId(parameters.getQueryParameters().getFirst("requestId"));
 
-            ConfigurationController controller = new ConfigurationController();
-            return Response.ok().entity(controller.getConfiguration(authorization, model)).build();
+                model.setPartnerid(parameters.getQueryParameters().getFirst("partnerid"));
 
-        }
+                ConfigurationController controller = new ConfigurationController();
+                return Response.ok().entity(controller.getConfiguration(authorization, model)).build();
 
+             }
+        } catch (Exception e) {
+            return Response.serverError().build();
+        }   
+        
         return Response.serverError().build();
     }
 

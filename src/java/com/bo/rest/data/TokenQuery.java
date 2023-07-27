@@ -31,17 +31,18 @@ public class TokenQuery {
                         + " cr.apiKey = '%s' and"
                         + " cr.password = '%s'", token.getDeviceId(), token.getExternalDeviceId(), token.getApiKey(), token.getPassword());
             } else if (source.equals(TypeUtils.PARTNER)) {
+                
                 query = String.format("select"
-                        + " cr.apikey"
-                        + ", cr.password"
-                        + ", pt.id_partner"
-                        + " from partner pt, credenciales cr"
+                        + " cc.id_partner as partnerid, cc.apikey as apiKey, cb.uniqueCustomerIdentifier as subject "
+                        + " from "
+                        + " credenciales cc , customer_bank cb"
                         + " where "
-                        + " pt.id_partner = cr.id_partner and"
-                        + " cr.apiKey = '%s' and"
-                        + " cr.password = '%s' and"
-                        + " pt.id_partner = '%s' and"
-                        + " pt.email_contacto_primario = '%s'", token.getApiKey(), token.getPassword(), token.getDeviceId(), token.getEmail());
+                        + " cb.uniqueCustomerIdentifier = '%s' and"
+                        + " cb.telefono = '%s' and"
+                        + " cb.email = '%s' and"
+                        + " cc.apikey = '%s' and"
+                        + " cc.password = '%s'", token.getUniqueCustomerIdentifier(), token.getDeviceId(), token.getEmail(), token.getApiKey(), token.getPassword());
+                
             }
         } catch (Exception e) {
             return null;

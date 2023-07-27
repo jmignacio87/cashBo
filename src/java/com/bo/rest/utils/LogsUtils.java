@@ -28,7 +28,8 @@ public class LogsUtils {
 
         try {
             // Archivo que obtiene la configuracion del log
-            jc.doConfigure("/Users/aarauco2608/Desktop/RyuZaKi/Internal-Projects/cashBo/logback-config.xml");
+            jc.doConfigure("/home/pagos/bin/logback-config.xml");//"C:\\Users\\IGNACIO\\Documents\\NetBeansProjects\\cashBo\\logback-config.xml");
+            
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
