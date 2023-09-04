@@ -30,6 +30,7 @@ public class PartnerQuery {
                 + " from partner pt , pbank_cashpoint pbcp, cashpoint cp, cashpoint_horario_atencion cph  "
                 + " where pt.id_partner = '%s' and  "
                 + " pt.id_partner = pbcp.id_partner_bank and  "
+                + " pbcp.estado = 'AC' and "
                 + " pbcp.cashpoint_id = cp.cashpoint_id and  "
                 + " cp.cashpoint_id = cph.cashpoint_id and  "
                 + " cph.id_dia = (select "
