@@ -4,6 +4,7 @@
  */
 package com.bo.rest.recursos;
 
+import com.bo.rest.controlador.CancelController;
 import com.bo.rest.controlador.ConfigurationController;
 import com.bo.rest.controlador.LoginController;
 import com.bo.rest.controlador.MerchantController;
@@ -50,7 +51,7 @@ public class partner {
 
         if (authorization.startsWith("Bearer")) {
             SearchNearbyModel model = new SearchNearbyModel();
-            model.setRequestId(Integer.valueOf(parameters.getQueryParameters().getFirst("requestId")));
+            //model.setRequestId(Integer.valueOf(parameters.getQueryParameters().getFirst("requestId"))); //comentamos poeque fortaleza indica q no envia.
             model.setTransactionSource(parameters.getQueryParameters().getFirst("transactionSource"));
             model.setLatitude(parameters.getQueryParameters().getFirst("position_lat"));
             model.setLongitude(parameters.getQueryParameters().getFirst("position_lng"));
@@ -118,6 +119,24 @@ public class partner {
             MerchantController controller = new MerchantController();
 
             return Response.ok().entity(controller.getMerchant(authorization, body)).build();
+        }
+
+        return Response.serverError().build();
+    }
+    
+    
+    @POST
+    @Path("/cancel")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response cancel(@Context HttpHeaders headers, String body) {
+
+        String authorization = headers.getRequestHeader("Authorization").get(0);
+
+        if (authorization.startsWith("Bearer")) {
+            CancelController controller = new CancelController();
+
+            return Response.ok().entity(controller.getCancel(authorization, body)).build();
         }
 
         return Response.serverError().build();

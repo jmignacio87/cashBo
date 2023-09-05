@@ -120,6 +120,7 @@ public class MerchantController {
                 data.addProperty("queue_number", result.getString("queue_number"));
                 data.addProperty("transactionCreationTime", result.getString("transactionCreationTime"));
                 data.addProperty("random_code", result.getString("random_code"));
+                data.addProperty("requestactiveperiod", "15"); //agregamos el parametro para control de fortaleza
                 
                 code = 0;
                 message = "Success";

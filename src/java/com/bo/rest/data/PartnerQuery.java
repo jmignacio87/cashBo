@@ -100,4 +100,15 @@ public class PartnerQuery {
                 + "	trx.id_estado_trx = 		e.id_estado_trx and "
                 + "	trx.id_partner_bank = 	pt.id_partner", cashpoint_id_out);
     }
+    
+    
+    public static String getQueryCancel(String socash_txn_id, String TransactionSource) { //update
+        return String.format("UPDATE"
+                + " trx_codigopin set id_estado_trx = 4 ,"
+                + " fecha_proceso = NOW()"
+                + " where "
+                + " socash_txn_id = '%s' and id_estado_trx = %s", socash_txn_id, '1');
+    }
+    
+   
 }
