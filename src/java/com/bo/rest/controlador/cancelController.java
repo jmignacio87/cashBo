@@ -80,8 +80,7 @@ public class CancelController {
                 code = 0;
                 message = "Success";
                 JsonObject data = new JsonObject();
-                
-                
+                                
                 data.addProperty("requestId", NULL);
                 data.addProperty("partnerid", token.getDeviceId());
                 data.addProperty("ipAddress", NULL);
