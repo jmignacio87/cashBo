@@ -39,9 +39,9 @@ public class TokenQuery {
                         + " where "
                         + " cb.uniqueCustomerIdentifier = '%s' and"
                         //+ " cb.telefono = '%s' and"
-                        + " cb.email = '%s' and"
+                        //+ " cb.email = '%s' and"
                         + " cc.apikey = '%s' and"
-                        + " cc.password = '%s'", token.getUniqueCustomerIdentifier(), /*token.getDeviceId(),*/ token.getEmail(), token.getApiKey(), token.getPassword());
+                        + " cc.password = '%s'", token.getUniqueCustomerIdentifier(), /*token.getDeviceId(), token.getEmail(),*/ token.getApiKey(), token.getPassword());
                 
             }
         } catch (Exception e) {
