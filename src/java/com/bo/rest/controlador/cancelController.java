@@ -70,7 +70,7 @@ public class CancelController {
         
          try {
             Statement statement = connection.createStatement();
-            String query = PartnerQuery.getQueryCancel(cancel.getSocash_txn_id(), cancel.getTransactionSource());
+            String query = PartnerQuery.getQueryCancel(cancel.getSocash_txn_id(), cancel.getTransactionSource(), token.getDeviceId());
             
             this.logger.debug("Query Cancel: {}", query);
 
@@ -92,7 +92,7 @@ public class CancelController {
             }
         } catch (Exception e) {
             code = -1;
-            message = "Error al cancelar codigo, posiblemente el codigo ya este expirado";
+            message = "Error al cancelar codigo, posiblemente el codigo ya este expirado "+ e.toString();
             this.logger.debug("Exception update cancel: {}", e.toString());
         }
         

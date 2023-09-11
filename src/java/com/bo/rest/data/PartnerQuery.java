@@ -102,12 +102,14 @@ public class PartnerQuery {
     }
     
     
-    public static String getQueryCancel(String socash_txn_id, String TransactionSource) { //update
+    public static String getQueryCancel(String socash_txn_id, String TransactionSource, String id_partnerBank) { //update
         return String.format("UPDATE"
                 + " trx_codigopin set id_estado_trx = 4 ,"
                 + " fecha_proceso = NOW()"
                 + " where "
-                + " socash_txn_id = '%s' and id_estado_trx = %s", socash_txn_id, '1');
+                + " socash_txn_id = '%s' and "
+                + " id_estado_trx = %s and "
+                + " id_partner_bank = '%s'", socash_txn_id, '1', id_partnerBank);
     }
     
    
