@@ -5,6 +5,7 @@ import com.bo.rest.controlador.LoginController;
 import com.bo.rest.controlador.TransactionDetailsController;
 import com.bo.rest.controlador.TransactionsController;
 import com.bo.rest.controlador.ValidateTransactionController;
+import com.bo.rest.modelos.pendingModel;
 import com.bo.rest.utils.TypeUtils;
 
 import javax.ws.rs.Consumes;
@@ -16,6 +17,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 /**
  *
@@ -34,6 +36,7 @@ public class cashpoint {
 
     }
 
+    /*
     @GET
     @Path("/transactions/pending")
     @Produces(MediaType.APPLICATION_JSON)
@@ -48,6 +51,44 @@ public class cashpoint {
 
         return Response.serverError().build();
     }
+    */
+    @GET
+    @Path("/transactions/pending")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPendingTransactions(@Context HttpHeaders headers, @Context UriInfo parameters) {
+        String authorization = headers.getRequestHeader("Authorization").get(0);
+        pendingModel model = new pendingModel();
+
+        if (authorization.startsWith("Bearer")) {
+            TransactionsController transactions = new TransactionsController();
+
+            model.setBank_id(parameters.getQueryParameters().getFirst("bank_id"));
+            
+            return Response.ok().entity(transactions.getPendingTransactions(authorization, model.getBank_id())).build();
+            
+        }
+
+        return Response.serverError().build();
+    }
+    
+    /*
+     @GET
+    @Path("/transaction-status")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTransactionStatus(@Context HttpHeaders headers, @Context UriInfo parameters) {
+        String authorization = headers.getRequestHeader("Authorization").get(0);
+
+        if (authorization.startsWith("Bearer")) {
+            TransactionStatusModel model = new TransactionStatusModel();
+            model.setSocash_txn_id(parameters.getQueryParameters().getFirst("socash_txn_id"));
+
+            TransactionStatusController controller = new TransactionStatusController();
+            return Response.ok().entity(controller.getTransactionStatus(authorization, model)).build();
+        }
+
+        return Response.serverError().build();
+    }   
+    */
 
     @POST
     @Path("/transactiondetails")

@@ -35,9 +35,9 @@ public class TransactionsController {
         this.logger = LogsUtils.getLogger("TRANSACTION");
     }
 
-    public String getPendingTransactions(String authorization) {
+    public String getPendingTransactions(String authorization, String bank_id) {
         try {
-            this.logger.debug("Transaction Method - Parametros | token: {}", authorization);
+            this.logger.debug("Transaction Method - Parametros | token: {} | bank_id", authorization, bank_id);
             String bearerToken = authorization.split(" ")[1];
             String subjectToken = "";
 
@@ -52,7 +52,7 @@ public class TransactionsController {
             JsonObject jsonObject = new JsonParser().parse(subjectToken).getAsJsonObject();
             TokenModel token = this.gson.fromJson(jsonObject, TokenModel.class);
 
-            ArrayList<TransactionModel> listTransactionPendings = this.getListTransactionPendings(token);
+            ArrayList<TransactionModel> listTransactionPendings = this.getListTransactionPendings(token, bank_id);
 
             JsonObject response = new JsonObject();
 
@@ -72,10 +72,10 @@ public class TransactionsController {
         }
     }
 
-    private ArrayList<TransactionModel> getListTransactionPendings(TokenModel token) {
+    private ArrayList<TransactionModel> getListTransactionPendings(TokenModel token, String bank_id) {
         try {
             Statement statement = connection.createStatement();
-            String query = CashpointQuery.getQueryTransactionsPending(token.getDeviceId());
+            String query = CashpointQuery.getQueryTransactionsPending(token.getDeviceId(), bank_id);
             this.logger.debug("Query Transaction: {}", query);
 
             ResultSet result = statement.executeQuery(query);

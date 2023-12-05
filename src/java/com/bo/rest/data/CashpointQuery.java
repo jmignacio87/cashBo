@@ -10,12 +10,12 @@ package com.bo.rest.data;
  */
 public class CashpointQuery {
 
-    public static String getQueryTransactionsPending(String deviceId) {
+    public static String getQueryTransactionsPending(String deviceId, String bank_id) {
         String query = null;
 
         query = String.format("select socash_txn_id as socash_txn_id, queue_number as queue_number"
                 + " from trx_codigopin"
-                + " where id_estado_trx = 1 and cashpoint_id = '%s'", deviceId);
+                + " where id_estado_trx = 1 and cashpoint_id = '%s' and id_partner_bank = '%s'", deviceId, bank_id);
 
         return query;
     }
