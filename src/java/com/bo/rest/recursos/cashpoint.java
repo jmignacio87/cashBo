@@ -1,5 +1,6 @@
 package com.bo.rest.recursos;
 
+import com.bo.rest.controlador.EnablepointController;
 import com.bo.rest.controlador.GaveController;
 import com.bo.rest.controlador.LoginController;
 import com.bo.rest.controlador.TransactionDetailsController;
@@ -71,25 +72,7 @@ public class cashpoint {
         return Response.serverError().build();
     }
     
-    /*
-     @GET
-    @Path("/transaction-status")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getTransactionStatus(@Context HttpHeaders headers, @Context UriInfo parameters) {
-        String authorization = headers.getRequestHeader("Authorization").get(0);
-
-        if (authorization.startsWith("Bearer")) {
-            TransactionStatusModel model = new TransactionStatusModel();
-            model.setSocash_txn_id(parameters.getQueryParameters().getFirst("socash_txn_id"));
-
-            TransactionStatusController controller = new TransactionStatusController();
-            return Response.ok().entity(controller.getTransactionStatus(authorization, model)).build();
-        }
-
-        return Response.serverError().build();
-    }   
-    */
-
+    
     @POST
     @Path("/transactiondetails")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -138,5 +121,21 @@ public class cashpoint {
 
         return Response.serverError().build();
     }
+    
+    @POST
+    @Path("/enablepoint")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response enablepoint(@Context HttpHeaders headers, String body){
+       
+        String authorization = headers.getRequestHeader("Authorization").get(0);
+        
+        if (authorization.startsWith("Bearer")){
+            EnablepointController enablepointController = new EnablepointController();
+            return Response.ok().entity(enablepointController.getEnablepointRequest(authorization, body)).build();
+        }
+        return Response.serverError().build();
+    }
+    
 
 }

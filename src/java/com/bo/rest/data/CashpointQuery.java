@@ -73,4 +73,11 @@ public class CashpointQuery {
                 + " where socash_txn_id = '%s' and"
                 + " random_code = '%d'", requestid, socash_txn_id, random_code);
     }
+    
+    
+    public static String getQueryUpdateEnablepoint(String cashpoint_id, String estado) {
+        return String.format("update cashpoint"
+                + " set estado_habilitado = '%s'"
+                + " where cashpoint_id = '%s'" , estado, cashpoint_id);
+    }
 }
