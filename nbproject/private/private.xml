@@ -3,8 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/IGNACIO/Documents/NetBeansProjects/cashBo/src/java/com/bo/rest/recursos/cashpoint.java</file>
             <file>file:/C:/Users/IGNACIO/Documents/NetBeansProjects/cashBo/src/java/com/bo/rest/Aplicacion.java</file>
+=======
+            <file>file:/C:/Users/IGNACIO/Documents/NetBeansProjects/cashBo/src/java/com/bo/rest/utils/TokenUtils.java</file>
+            <file>file:/C:/Users/IGNACIO/Documents/NetBeansProjects/cashBo/src/java/com/bo/rest/utils/LogsUtils.java</file>
+            <file>file:/C:/Users/IGNACIO/Documents/NetBeansProjects/cashBo/src/java/com/bo/rest/controlador/ConfigurationController.java</file>
+>>>>>>> jm/cashpoint
         </group>
     </open-files>
 </project-private>
