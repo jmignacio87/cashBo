@@ -10,12 +10,12 @@ package com.bo.rest.data;
  */
 public class CashpointQuery {
 
-    public static String getQueryTransactionsPending(String deviceId) {
+    public static String getQueryTransactionsPending(String deviceId, String bank_id) {
         String query = null;
 
-        query = String.format("select socash_txn_id as socash_txn_id, 1 as queue_number"
+        query = String.format("select socash_txn_id as socash_txn_id, queue_number as queue_number"
                 + " from trx_codigopin"
-                + " where id_estado_trx = 1 and cashpoint_id = '%s'", deviceId);
+                + " where id_estado_trx = 1 and cashpoint_id = '%s' and id_partner_bank = '%s'", deviceId, bank_id);
 
         return query;
     }
@@ -34,7 +34,8 @@ public class CashpointQuery {
                 + " md.sigla AS withdrawalCurrency,"
                 + " tcp.queue_number AS queue_number,"
                 + " cp.latitud AS cashpoint_latitude,"
-                + " cp.longitud AS cashpoint_longitude"
+                + " cp.longitud AS cashpoint_longitude,"
+                + " tcp.random_code AS random_code"
                 + " FROM trx_codigopin tcp,"
                 + " cashpoint cp,"
                 + " partner pt,"
@@ -68,8 +69,15 @@ public class CashpointQuery {
 
     public static String getQueryUpdateTransaction(String requestid, String socash_txn_id, Integer random_code) {
         return String.format("update trx_codigopin"
-                + " set id_estado_trx = 3, requestid = '%s'"
+                + " set id_estado_trx = 3, fecha_proceso = NOW(), requestid = '%s'"
                 + " where socash_txn_id = '%s' and"
                 + " random_code = '%d'", requestid, socash_txn_id, random_code);
+    }
+    
+    
+    public static String getQueryUpdateEnablepoint(String cashpoint_id, String estado) {
+        return String.format("update cashpoint"
+                + " set estado_habilitado = '%s'"
+                + " where cashpoint_id = '%s'" , estado, cashpoint_id);
     }
 }

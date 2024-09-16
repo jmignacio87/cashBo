@@ -5,16 +5,16 @@
 package com.bo.rest.controlador;
 
 import com.bo.rest.data.CashpointQuery;
-import com.bo.rest.modelos.TokenModel;
 import com.bo.rest.modelos.TransactionDetail;
 import com.bo.rest.utils.DBConnection;
+import com.bo.rest.utils.LogsUtils;
 import com.bo.rest.utils.TokenUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import org.slf4j.Logger;
 
 /**
  *
@@ -22,17 +22,26 @@ import java.sql.Statement;
  */
 public class TransactionDetailsController {
 
+    private Logger logger;
     private Gson gson = new Gson();
     Connection connection = DBConnection.getConnection();
 
+    public TransactionDetailsController() {
+        this.logger = LogsUtils.getLogger("TRANSACTION");
+    }
+
     public String getTransactionDetail(String authorization, String body) {
         try {
-
+            this.logger.debug("Transaction Detail Method Parametros: token: {} | body: {}", authorization, body);
             String bearerToken = authorization.split(" ")[1];
             String subjectToken = "";
 
             if (TokenUtils.verifyJwt(bearerToken)) {
                 subjectToken = TokenUtils.getSubject(bearerToken);
+                this.logger.debug("Token Valido");
+            } else {
+                this.logger.debug("Token Expirado");
+                throw new Exception();
             }
 
             TransactionDetail transactionDetailBody = this.gson.fromJson(body, TransactionDetail.class);
@@ -45,6 +54,7 @@ public class TransactionDetailsController {
             return response.toString();
 
         } catch (Exception e) {
+            this.logger.debug("Exception Transaction Detail: {}", e.toString());
             return null;
         }
     }
@@ -53,6 +63,7 @@ public class TransactionDetailsController {
         try {
             Statement statement = connection.createStatement();
             String query = CashpointQuery.getQueryTransactionsDetails(transactionDetailBody.getSocash_txn_id());
+            this.logger.debug("Query Transaction Detail: {}", query);
 
             ResultSet result = statement.executeQuery(query);
 
@@ -72,12 +83,16 @@ public class TransactionDetailsController {
                 jsonResponse.addProperty("queue_number", result.getInt("queue_number"));
                 jsonResponse.addProperty("cashpoint_latitude", result.getString("cashpoint_latitude"));
                 jsonResponse.addProperty("cashpoint_longitude", result.getString("cashpoint_longitude"));
+                jsonResponse.addProperty("random_code", result.getInt("random_code"));
+                jsonResponse.addProperty("customerName", "");
+                jsonResponse.addProperty("paymentMethodId", "");
 
                 return jsonResponse;
             }
 
             return null;
         } catch (Exception e) {
+            this.logger.debug("Exception Query Transaction Detail: {}", e.toString());
             return null;
         }
     }

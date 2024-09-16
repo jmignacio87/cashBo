@@ -30,6 +30,7 @@ public class PartnerQuery {
                 + " from partner pt , pbank_cashpoint pbcp, cashpoint cp, cashpoint_horario_atencion cph  "
                 + " where pt.id_partner = '%s' and  "
                 + " pt.id_partner = pbcp.id_partner_bank and  "
+                + " pbcp.estado = 'AC' and "
                 + " pbcp.cashpoint_id = cp.cashpoint_id and  "
                 + " cp.cashpoint_id = cph.cashpoint_id and  "
                 + " cph.id_dia = (select "
@@ -55,10 +56,10 @@ public class PartnerQuery {
                 + " pt.monto_maximo as maxwithdrawalamountpertransaction, "
                 + " pt.monto_maximo_dia as maxwithdrawalamountperday, "
                 + " pt.cust_acct_debited as cust_acct_debited"
-                + "from partner pt, moneda mnd "
-                + "where pt.id_partner = '%s' and "
-                + "pt.id_tipo = 1 and"
-                + "pt.id_moneda = mnd.id_moneda ", devideId);
+                + " from partner pt, moneda mnd "
+                + " where pt.id_partner = '%s' and "
+                + " pt.id_tipo = 1 and"
+                + " pt.id_moneda = mnd.id_moneda ", devideId);
     }
 
     public static String getQueryTransactionStatus(String socash_txn_id) {
@@ -99,4 +100,17 @@ public class PartnerQuery {
                 + "	trx.id_estado_trx = 		e.id_estado_trx and "
                 + "	trx.id_partner_bank = 	pt.id_partner", cashpoint_id_out);
     }
+    
+    
+    public static String getQueryCancel(String socash_txn_id, String TransactionSource, String id_partnerBank) { //update
+        return String.format("UPDATE"
+                + " trx_codigopin set id_estado_trx = 4 ,"
+                + " fecha_proceso = NOW()"
+                + " where "
+                + " socash_txn_id = '%s' and "
+                + " id_estado_trx = %s and "
+                + " id_partner_bank = '%s'", socash_txn_id, '1', id_partnerBank);
+    }
+    
+   
 }
