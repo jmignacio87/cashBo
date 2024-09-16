@@ -1,0 +1,6 @@
+2023-07-03 22:52:45,819 [DEBUG][http-listener-1(1)][LOGIN] SignIn Parametros: source -> cashpoint | body -> {
+    "apiKey": "1ys3sL3pTL7fwMloHh3Awhql5L9jBTgA3lM0XUYhg0EhZrzCjppR3d0b284b-42ee-40ca-8c22-0de92888d951",
+    "password": "v3pmNQn2BfzPknThbpGgzbjlQf5wIn1GtKZ6h4Uzcojj0Ci6DA5J",
+    "deviceId": "MBOTES86636573",
+    "externalDeviceId": "BOPAG000"
+}
